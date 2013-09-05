@@ -1,4 +1,0 @@
-phonewords
-==========
-
-phone words generator
