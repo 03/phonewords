@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 
 public class PhonewordFinder {
 
-	static final String DELIMETER = "-";
+	static final String DELIMITER = "-";
+	static final String DELIMITER_POS = "#";
 	static final Pattern allNumsPtn = Pattern.compile("\\d+");
 
 	private WordReader dictionary = null;
@@ -82,17 +83,19 @@ public class PhonewordFinder {
 		Iterator<String> itorator = insertPointList.iterator();
 		while (itorator.hasNext()) {
 			String insertPointStr = itorator.next();
-			char[] insertPoints = insertPointStr.toCharArray();
+			
+			//char[] insertPoints = insertPointStr.toCharArray();
+			String[] insertPoints = insertPointStr.split(DELIMITER_POS);
 
 			StringBuilder sb = new StringBuilder();
 			String substr = "";
 			int lastposition = 0;
 			for (int i = 0; i < insertPoints.length; i++) {
-				int position = Integer.parseInt(String.valueOf(insertPoints[i]));
+				int position = Integer.parseInt(insertPoints[i]);
 
 				substr = phoneNum.substring(lastposition, position);
 				if (!"".equals(substr)) {
-					sb.append(substr + DELIMETER);
+					sb.append(substr + DELIMITER);
 				}
 
 				lastposition = position;
@@ -120,7 +123,7 @@ public class PhonewordFinder {
 		List<String> wordList = new ArrayList<String>();
 
 		// for each formatted string, find matched word from dictionary
-		String[] formatted = phoneNumWithDelimeter.split(DELIMETER);
+		String[] formatted = phoneNumWithDelimeter.split(DELIMITER);
 		int countOfParts = formatted.length;
 
 		// check whether match can be found
@@ -167,7 +170,7 @@ public class PhonewordFinder {
 					}
 					sb.deleteCharAt(sb.length() - 1);
 				}
-				sb.append(DELIMETER);
+				sb.append(DELIMITER);
 			}
 			sb.deleteCharAt(sb.length() - 1);
 
@@ -229,14 +232,17 @@ public class PhonewordFinder {
 		// add whole word
 		results.add("0");
 
+		StringBuilder sb = new StringBuilder();
 		for (int i = 1; i <= countOfCombination; i++) {
-			StringBuilder sb = new StringBuilder();
+			sb.setLength(0);
 			for (int j = 0; j < length; j++) {
 				if ((i & (1 << j)) != 0) {
 					sb.append(elems[j]);
+					// add delimiter in case it exceed 9, i.e. 10, 11, 12 ...
+					sb.append(DELIMITER_POS);
 				}
 			}
-			results.add(sb.toString());
+			results.add(sb.substring(0, sb.length() - 1).toString());
 		}
 
 		return results;

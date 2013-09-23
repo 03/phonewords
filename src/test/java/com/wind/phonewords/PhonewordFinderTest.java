@@ -40,6 +40,8 @@ public class PhonewordFinderTest {
 		assertTrue(_phonewordFinder.num2words("43289").size() > 0);
 		assertTrue(_phonewordFinder.num2words("356937").size() > 0);
 		assertTrue(_phonewordFinder.num2words("625673278").size() > 0);
+		
+		assertTrue(_phonewordFinder.num2words("035693713569371").size() > 0);
 	}
 	
 	@Test
